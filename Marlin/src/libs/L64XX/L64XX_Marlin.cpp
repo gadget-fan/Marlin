@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -127,12 +127,6 @@ void L6470_populate_chain_array() {
   #if AXIS_IS_L64XX(E5)
     _L6470_INIT_SPI(E5);
   #endif
-  #if AXIS_IS_L64XX(E6)
-    _L6470_INIT_SPI(E6);
-  #endif
-  #if AXIS_IS_L64XX(E7)
-    _L6470_INIT_SPI(E7);
-  #endif
 }
 
 
@@ -246,12 +240,6 @@ uint16_t L64XX_Marlin::get_status(const L64XX_axis_t axis) {
     #if AXIS_IS_L64XX(E5)
       case E5: return STATUS_L6470(E5);
     #endif
-    #if AXIS_IS_L64XX(E6)
-      case E6: return STATUS_L6470(E6);
-    #endif
-    #if AXIS_IS_L64XX(E7)
-      case E7: return STATUS_L6470(E7);
-    #endif
   }
 
   return 0; // Not needed but kills a compiler warning
@@ -305,12 +293,6 @@ uint32_t L64XX_Marlin::get_param(const L64XX_axis_t axis, const uint8_t param) {
     #if AXIS_IS_L64XX(E5)
       case E5: return GET_L6470_PARAM(E5);
     #endif
-    #if AXIS_IS_L64XX(E6)
-      case E6: return GET_L6470_PARAM(E6);
-    #endif
-    #if AXIS_IS_L64XX(E7)
-      case E7: return GET_L6470_PARAM(E7);
-    #endif
   }
 
   return 0; // not needed but kills a compiler warning
@@ -363,12 +345,6 @@ void L64XX_Marlin::set_param(const L64XX_axis_t axis, const uint8_t param, const
     #endif
     #if AXIS_IS_L64XX(E5)
       case E5: SET_L6470_PARAM(E5); break;
-    #endif
-    #if AXIS_IS_L64XX(E6)
-      case E6: SET_L6470_PARAM(E6); break;
-    #endif
-    #if AXIS_IS_L64XX(E7)
-      case E7: SET_L6470_PARAM(E7); break;
     #endif
   }
 }
@@ -718,31 +694,25 @@ void L64XX_Marlin::say_axis(const L64XX_axis_t axis, const uint8_t label/*=true*
       {  6, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(Z4)
-      {  7, 0, 0, 0, 0, 0, 0 },
+      {  6, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(E0)
-      {  8, 0, 0, 0, 0, 0, 0 },
+      {  7, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(E1)
-      {  9, 0, 0, 0, 0, 0, 0 },
+      {  8, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(E2)
-      { 10, 0, 0, 0, 0, 0, 0 },
+      {  9, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(E3)
-      { 11, 0, 0, 0, 0, 0, 0 },
+      { 10, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(E4)
-      { 12, 0, 0, 0, 0, 0, 0 },
+      { 11, 0, 0, 0, 0, 0, 0 },
     #endif
     #if AXIS_IS_L64XX(E5)
-      { 13, 0, 0, 0, 0, 0, 0 }
-    #endif
-    #if AXIS_IS_L64XX(E6)
-      { 14, 0, 0, 0, 0, 0, 0 }
-    #endif
-    #if AXIS_IS_L64XX(E7)
-      { 16, 0, 0, 0, 0, 0, 0 }
+      { 12, 0, 0, 0, 0, 0, 0 }
     #endif
   };
 

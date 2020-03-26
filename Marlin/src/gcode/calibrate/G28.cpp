@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -106,8 +106,6 @@
       #if AXIS_HAS_STALLGUARD(Y2)
         tmc_disable_stallguard(stepperY2, stealth_states.y2);
       #endif
-      do_blocking_move_to_xy(-0.5 * x_axis_home_dir, -0.5 * home_dir(Y_AXIS), fr_mm_s / 2);
-      safe_delay(100);
     #endif
   }
 
@@ -120,7 +118,7 @@
     // Disallow Z homing if X or Y are unknown
     if (!TEST(axis_known_position, X_AXIS) || !TEST(axis_known_position, Y_AXIS)) {
       LCD_MESSAGEPGM(MSG_ERR_Z_HOMING);
-      SERIAL_ECHO_MSG(STR_ERR_Z_HOMING_SER);
+      SERIAL_ECHO_MSG(MSG_ERR_Z_HOMING_SER);
       return;
     }
 
@@ -156,7 +154,7 @@
     }
     else {
       LCD_MESSAGEPGM(MSG_ZPROBE_OUT);
-      SERIAL_ECHO_MSG(STR_ZPROBE_OUT_SER);
+      SERIAL_ECHO_MSG(MSG_ZPROBE_OUT_SER);
     }
 
     if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("<<< home_z_safely");
@@ -407,7 +405,6 @@ void GcodeSuite::G28(const bool always_home_all) {
 
     // Home Z last if homing towards the bed
     #if Z_HOME_DIR < 0
-
       if (doZ) {
         #if ENABLED(BLTOUCH)
           bltouch.init();
@@ -419,17 +416,10 @@ void GcodeSuite::G28(const bool always_home_all) {
         #endif
 
         #if HOMING_Z_WITH_PROBE && defined(Z_AFTER_PROBING)
-          #if Z_AFTER_HOMING > Z_AFTER_PROBING
-            do_blocking_move_to_z(Z_AFTER_HOMING);
-          #else
-            probe.move_z_after_probing();
-          #endif
-        #elif defined(Z_AFTER_HOMING)
-          do_blocking_move_to_z(Z_AFTER_HOMING);
+          probe.move_z_after_probing();
         #endif
 
       } // doZ
-
     #endif // Z_HOME_DIR < 0
 
     sync_plan_position();
@@ -531,7 +521,7 @@ void GcodeSuite::G28(const bool always_home_all) {
       #define _HOME_SYNC doZ        // Only for Z-axis
     #endif
     if (_HOME_SYNC)
-      SERIAL_ECHOLNPGM(STR_Z_MOVE_COMP);
+      SERIAL_ECHOLNPGM(MSG_Z_MOVE_COMP);
   #endif
 
   if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("<<< G28");

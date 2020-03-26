@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -167,7 +167,7 @@
       extruder_duplication_enabled = ena && (duplication_e_mask >= 3);
     }
     SERIAL_ECHO_START();
-    SERIAL_ECHOPGM(STR_DUPLICATION_MODE);
+    SERIAL_ECHOPGM(MSG_DUPLICATION_MODE);
     serialprint_onoff(extruder_duplication_enabled);
     if (ena) {
       SERIAL_ECHOPGM(" ( ");

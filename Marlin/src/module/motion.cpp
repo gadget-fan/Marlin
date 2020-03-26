@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -1018,7 +1018,7 @@ void prepare_move_to_destination() {
 
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         ignore_e = thermalManager.tooColdToExtrude(active_extruder);
-        if (ignore_e) SERIAL_ECHO_MSG(STR_ERR_COLD_EXTRUDE_STOP);
+        if (ignore_e) SERIAL_ECHO_MSG(MSG_ERR_COLD_EXTRUDE_STOP);
       #endif
 
       #if ENABLED(PREVENT_LENGTHY_EXTRUDE)
@@ -1030,13 +1030,13 @@ void prepare_move_to_destination() {
             MIXER_STEPPER_LOOP(e) {
               if (e_delta * collector[e] > (EXTRUDE_MAXLENGTH)) {
                 ignore_e = true;
-                SERIAL_ECHO_MSG(STR_ERR_LONG_EXTRUDE_STOP);
+                SERIAL_ECHO_MSG(MSG_ERR_LONG_EXTRUDE_STOP);
                 break;
               }
             }
           #else
             ignore_e = true;
-            SERIAL_ECHO_MSG(STR_ERR_LONG_EXTRUDE_STOP);
+            SERIAL_ECHO_MSG(MSG_ERR_LONG_EXTRUDE_STOP);
           #endif
         }
       #endif
@@ -1755,9 +1755,10 @@ void homeaxis(const AxisEnum axis) {
   #endif
 
   #if DISABLED(DELTA) && defined(HOMING_BACKOFF_MM)
-    const xyz_float_t endstop_backoff = HOMING_BACKOFF_MM;
-    if (endstop_backoff[axis]) {
-      current_position[axis] -= ABS(endstop_backoff[axis]) * axis_home_dir;
+    constexpr xyz_float_t endstop_backoff = HOMING_BACKOFF_MM;
+    const float backoff_mm = endstop_backoff[axis];
+    if (backoff_mm) {
+      current_position[axis] -= ABS(backoff_mm) * axis_home_dir;
       line_to_current_position(
         #if HOMING_Z_WITH_PROBE
           (axis == Z_AXIS) ? MMM_TO_MMS(Z_PROBE_SPEED_FAST) :

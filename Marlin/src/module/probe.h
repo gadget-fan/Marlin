@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -43,13 +43,21 @@ public:
 
     static xyz_pos_t offset;
 
+    // Use offset_xy for read only access
+    // More optimal the XY offset is known to always be zero.
+    #if HAS_PROBE_XY_OFFSET
+      static const xyz_pos_t &offset_xy;
+    #else
+      static constexpr xy_pos_t offset_xy{0};
+    #endif
+
     static bool set_deployed(const bool deploy);
 
     #ifdef Z_AFTER_PROBING
       static void move_z_after_probing();
     #endif
-    static float probe_at_point(const float &rx, const float &ry, const ProbePtRaise raise_after=PROBE_PT_NONE, const uint8_t verbose_level=0, const bool probe_relative=true, const bool sanity_check=true);
-    static inline float probe_at_point(const xy_pos_t &pos, const ProbePtRaise raise_after=PROBE_PT_NONE, const uint8_t verbose_level=0, const bool probe_relative=true, const bool sanity_check=true) {
+    static float probe_at_point(const float &rx, const float &ry, const ProbePtRaise raise_after=PROBE_PT_NONE, const uint8_t verbose_level=0, const bool probe_relative=true);
+    static inline float probe_at_point(const xy_pos_t &pos, const ProbePtRaise raise_after=PROBE_PT_NONE, const uint8_t verbose_level=0, const bool probe_relative=true) {
       return probe_at_point(pos.x, pos.y, raise_after, verbose_level, probe_relative);
     }
     #if HAS_HEATED_BED && ENABLED(WAIT_FOR_BED_HEATER)
@@ -58,18 +66,11 @@ public:
 
   #else
 
-    static constexpr xyz_pos_t offset = xyz_pos_t({ 0, 0, 0 }); // See #16767
+    static constexpr xyz_pos_t offset{0};
+    static constexpr xy_pos_t offset_xy{0};
 
     static bool set_deployed(const bool) { return false; }
 
-  #endif
-
-  // Use offset_xy for read only access
-  // More optimal the XY offset is known to always be zero.
-  #if HAS_PROBE_XY_OFFSET
-    static const xyz_pos_t &offset_xy;
-  #else
-    static constexpr xy_pos_t offset_xy = xy_pos_t({ 0, 0 });   // See #16767
   #endif
 
   static inline bool deploy() { return set_deployed(true); }
@@ -162,9 +163,9 @@ public:
   #endif
 
 private:
-  static bool probe_down_to_z(const float z, const feedRate_t fr_mm_s);
+  static bool move_to_z(const float z, const feedRate_t fr_mm_s);
   static void do_z_raise(const float z_raise);
-  static float run_z_probe(const bool sanity_check=true);
+  static float run_z_probe();
 };
 
 extern Probe probe;

@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2019 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -324,9 +324,9 @@ void MarlinUI::_synchronize() {
   if (should_draw()) MenuItem_static::draw(LCD_HEIGHT >= 4, sync_message);
   if (no_reentry) return;
   // Make this the current handler till all moves are done
+  no_reentry = true;
   const screenFunc_t old_screen = currentScreen;
   goto_screen(_synchronize);
-  no_reentry = true;
   planner.synchronize(); // idle() is called until moves complete
   no_reentry = false;
   goto_screen(old_screen);
@@ -384,7 +384,7 @@ void scroll_screen(const uint8_t limit, const bool is_menu) {
 
   void line_to_z(const float &z) {
     current_position.z = z;
-    line_to_current_position(manual_feedrate_mm_s.z);
+    line_to_current_position(MMM_TO_MMS(manual_feedrate_mm_m.z));
   }
 
 #endif
